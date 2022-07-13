@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../common_style.css">
+    <script src="../common_js.js"></script>
+    <style>
+        form dl dt {
+            width: 100px;
+        }
+        .box {
+            width: 180px;
+        }
+        .note {
+            margin-left: 90px;
+        }
+        .btn-block {
+            margin-top: 0px;
+            margin-left: 100px;
+        }
+        .ketasu {
+            height: 31px;
+            width: 55px;
+        }
+    </style>
+</head>
+<body>
+<form class="diet_form">
+    <dl>
+        <dt>関数</dt>
+        <dd>
+            <select class="box">
+                <option value="1">sinθ (サイン)</option>
+                <option value="2">cosθ (コサイン)</option>
+                <option value="3">tanθ (タンジェント)</option>
+                <option value="4">sinθ cosθ tanθ</option>
+                <option value="5">cscθ (コセカンド)</option>
+                <option value="6">secθ (セカンド)</option>
+                <option value="7">cotθ (コタンジェント)</option>
+                <option value="8">cscθ secθ cotθ</option>
+            </select>
+        </dd>
+        <dt>角度θ</dt>
+        <dd>
+            <input id="txt_angle" type="text" class="box" value="5'12'6">
+            <p class="note">（5.25度は 5.25、5度12分6秒は 5'12'6 と入力）</p>
+        </dd>
+        <p class="btn-block">
+            <input type="button" class="calc-btn font-bold" value="計算">
+            <input type="button" class="calc-btn" value="クリア" style="padding-top: 3px;">
+            <select name="ketasu" class="ketasu">
+                <option value="6">6桁</option>
+                <option value="10">10桁</option>
+                <option value="14" selected="">14桁</option>
+                <option value="18">18桁</option>
+                <option value="22">22桁</option>
+                <option value="26">26桁</option>
+                <option value="30">30桁</option>
+                <option value="34">34桁</option>
+                <option value="38">38桁</option>
+                <option value="42">42桁</option>
+                <option value="46">46桁</option>
+                <option value="50">50桁</option>
+            </select>
+        </p>
+    </dl>
+</form>
+<script type="text/javascript" src="keisan.js"></script>
+</body>
+</html>
