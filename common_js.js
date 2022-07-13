@@ -18,14 +18,14 @@ function getTextOfTag(tagObj) {
 function setTextOfTag(tagObj, value) {
     tagObj.innerText = value;
 }
-// calculate function
+// calculate function by browser js
 function toDegree(degree) {
     return degree * Math.PI / 180;
 }
 function trimByNumberDigit(number, digit) {
     let fixedNumber = number.toFixed(6).toString();
     if(fixedNumber.endsWith('000')) return parseFloat(fixedNumber);
-
     let strNum = number.toString();
     let arrPart = strNum.split('.');
 }
+// math js

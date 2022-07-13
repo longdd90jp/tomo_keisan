@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../common_style.css">
     <script src="../common_js.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js"></script>
+    <script src="../lib/math.min.js"></script>
     <style>
         form dl dt {
             width: 100px;
@@ -25,7 +25,7 @@
             margin-left: 100px;
         }
 
-        .ketasu {
+        .precision {
             height: 31px;
             width: 55px;
             padding-top: 1px;
@@ -65,7 +65,7 @@
         <p class="btn-block">
             <input type="button" class="calc-btn font-bold" value="計算" onclick="calculate();">
             <input type="button" class="calc-btn clear-btn" value="クリア" onclick="clear();">
-            <select id="sl_ketasu" name="ketasu" class="ketasu">
+            <select id="sl_precision" class="precision">
                 <option value="6">6桁</option>
                 <option value="10">10桁</option>
                 <option value="14" selected="">14桁</option>
@@ -108,7 +108,7 @@
 <script type="text/javascript">
     let tagFunction;
     let tagAngle;
-    let tagKetasu;
+    let tagPrecision;
     let tagResult1;
     let tagResult2;
     let tagResult3;
@@ -123,6 +123,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         tagFunction = document.getElementById('sl_func');
         tagAngle = document.getElementById('txt_angle');
+        tagPrecision = document.getElementById('sl_precision');
         // tr
         tagResult1 = document.getElementById('tr_result_1');
         tagResult2 = document.getElementById('tr_result_2');
@@ -135,6 +136,12 @@
         tagValue1 = document.getElementById('td_value_result_1');
         tagValue2 = document.getElementById('td_value_result_2');
         tagValue3 = document.getElementById('td_value_result_3');
+
+        // change the configuration
+        math.config({
+            number: 'BigNumber',
+            precision: 64,
+        })
     });
 
     function calculate() {
