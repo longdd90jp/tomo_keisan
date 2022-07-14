@@ -8,6 +8,9 @@
     <script src="../common_js.js"></script>
     <script src="../lib/math.min.js"></script>
     <style>
+        .wrapper {
+            min-height: 365px;
+        }
         form dl dt {
             width: 100px;
         }
@@ -36,13 +39,40 @@
         }
 
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #d8b3b3;
             border-collapse: collapse;
+        }
+        .separate-line {
+            margin-left: 50px;
+            border: 1px solid #8f9fd8;
+            margin-bottom: 20px;
+            width: 350px;
+        }
+        .tbl-result {
+            margin-left: 100px;
+        }
+        .tbl-result thead td{
+            text-align: center;
+        }
+        .tbl-result tr {
+            height: 24px;
+        }
+        .td-title {
+            text-align: center;
+        }
+        .thead-title {
+            padding: 0px 10px;
+        }
+        .thead-value {
+            min-width: 100px;
+        }
+        .td-value {
+            padding-right: 5px;
         }
     </style>
 </head>
 <body>
-<form class="diet_form">
+<form class="wrapper">
     <dl>
         <dt>関数</dt>
         <dd>
@@ -64,7 +94,7 @@
         </dd>
         <p class="btn-block">
             <input type="button" class="calc-btn font-bold" value="計算" onclick="calculate();">
-            <input type="button" class="calc-btn clear-btn" value="クリア" onclick="clear();">
+            <input type="button" class="calc-btn clear-btn" value="クリア" onclick="clearInput();">
             <select id="sl_precision" class="precision">
                 <option value="6">6桁</option>
                 <option value="10">10桁</option>
@@ -81,25 +111,26 @@
             </select>
         </p>
     </dl>
-    <table>
-        <thead>
+    <div class="separate-line"></div>
+    <table class="tbl-result">
+        <thead class="font-bold">
         <tr>
-            <td>関数名</td>
-            <td>値</td>
+            <td class="thead-title">関数名</td>
+            <td class="thead-value">値</td>
         </tr>
         </thead>
         <tbody>
         <tr id="tr_result_1">
-            <td id="td_title_result_1">cscθ</td>
-            <td id="td_value_result_1">11.03003432146</td>
+            <td id="td_title_result_1" class="td-title">cscθ</td>
+            <td id="td_value_result_1" class="td-value">11.03003432146</td>
         </tr>
         <tr id="tr_result_2">
-            <td id="td_title_result_2">cscθ</td>
-            <td id="td_value_result_2">11.03003432146</td>
+            <td id="td_title_result_2" class="td-title">cscθ</td>
+            <td id="td_value_result_2" class="td-value">11.03003432146</td>
         </tr>
         <tr id="tr_result_3">
-            <td id="td_title_result_3">cscθ</td>
-            <td id="td_value_result_3">11.03003432146</td>
+            <td id="td_title_result_3" class="td-title">cscθ</td>
+            <td id="td_value_result_3" class="td-value">11.03003432146</td>
         </tr>
         </tbody>
     </table>
@@ -119,6 +150,13 @@
     let tagValue2;
     let tagValue3;
 
+    // input
+    let inputAngle;
+    let precision;
+
+    const MATH_DEG = 'deg';
+    const BLANK = '';
+
     // document ready
     document.addEventListener('DOMContentLoaded', function () {
         tagFunction = document.getElementById('sl_func');
@@ -136,6 +174,11 @@
         tagValue1 = document.getElementById('td_value_result_1');
         tagValue2 = document.getElementById('td_value_result_2');
         tagValue3 = document.getElementById('td_value_result_3');
+        // default
+        hideTag(tagResult2);
+        hideTag(tagResult3);
+        setTextOfTag(tagTitle1, BLANK);
+        setTextOfTag(tagValue1, BLANK);
 
         // change the configuration
         math.config({
@@ -145,11 +188,100 @@
     });
 
     function calculate() {
+        let isValid = checkInputAngle(tagAngle);
+        if(!isValid) {
+            alert('角度θが正しく入力してください。');
+            return;
+        }
 
+        hideAllResult();
+        precision = parseInt(getValueOfInput(tagPrecision));
+        let optFunc = getValueOfInput(tagFunction);
+        switch (optFunc) {
+            case '1':
+                calSin();
+                break;
+            case '2':
+                calCos();
+                break;
+            case '3':
+                calTan();
+                break;
+            case '4':
+                calSin();
+                calCos();
+                calTan();
+                break;
+        }
     }
 
-    function clear() {
+    function processDisplayVal(mathObj) {
+        let strVal = mathObj.toFixed(precision).toString();
+        if(strVal.endsWith('000')) return mathObj.toString();
+        return strVal;
 
+    }
+    function calSin() {
+        setTextOfTag(tagTitle1, 'sinθ');
+        let calVal = processDisplayVal(math.sin(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue1, calVal);
+        showTag(tagResult1);
+    }
+    function calCos() {
+        setTextOfTag(tagTitle2, 'cosθ');
+        let calVal = processDisplayVal(math.cos(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue2, calVal);
+        showTag(tagResult2);
+    }
+    function calTan() {
+        setTextOfTag(tagTitle3, 'tanθ');
+        let calVal = processDisplayVal(math.tan(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue3, calVal);
+        showTag(tagResult3);
+    }
+
+    function checkInputAngle() {
+        let angle = getValueOfInput(tagAngle);
+        if(angle.includes("'")) {
+            let arrChar = angle.split("'");
+
+            // correct is 5'2 or 5'2'1
+            if(arrChar.length > 3) return false;
+            let degree = 0;
+            let minute = 0;
+            let second = 0;
+            for (let i = 0; i < arrChar.length; i++) {
+                let intVal = parseInt(arrChar[i]);
+                // example: abc
+                if(isNaN(intVal)) return false;
+                // example: 5.0
+                if(intVal.toString() != arrChar[i]) return false;
+                if(i == 0) {
+                    degree = intVal;
+                } else if(i == 1) {
+                    minute = intVal;
+                } else {
+                    second = intVal;
+                }
+            }
+            // https://www.benricho.org/calculate/degree.html
+            inputAngle = degree + (minute/60) + (second/60/60);
+        } else {
+            inputAngle = parseFloat(angle);
+            if(isNaN(inputAngle)) return false;
+        }
+        inputAngle = math.bignumber(inputAngle);
+        return true;
+    }
+
+    function clearInput() {
+        setValueOfInput(tagAngle, BLANK);
+    }
+
+    function hideAllResult() {
+        hideTag(tagResult1);
+        hideTag(tagResult2);
+        hideTag(tagResult3);
     }
 </script>
 </html>

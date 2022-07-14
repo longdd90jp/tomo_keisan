@@ -18,6 +18,12 @@ function getTextOfTag(tagObj) {
 function setTextOfTag(tagObj, value) {
     tagObj.innerText = value;
 }
+function hideTag(tagObj) {
+    tagObj.classList.add("hide");
+}
+function showTag(tagObj) {
+    tagObj.classList.remove("hide");
+}
 // calculate function by browser js
 function toDegree(degree) {
     return degree * Math.PI / 180;
@@ -28,4 +34,3 @@ function trimByNumberDigit(number, digit) {
     let strNum = number.toString();
     let arrPart = strNum.split('.');
 }
-// math js
