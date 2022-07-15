@@ -88,6 +88,8 @@
         <p class="btn-block">
             <input type="button" class="calc-btn font-bold" value="計算" onclick="calculate();">
             <input type="button" class="calc-btn clear-btn" value="クリア" onclick="clearInput();">
+            <input type="button" class="calc-btn" value="保存" onclick="save();">
+            <input type="button" class="calc-btn" value="復元" onclick="recovery();">
             <select id="sl_precision" class="precision hide">
                 <option value="6">6桁</option>
                 <option value="10">10桁</option>
@@ -135,6 +137,16 @@
     let inputEdge;
     let inputBottom;
     let precision = 3;
+
+    // local storage
+    let savedData = {
+        txtEdge: 0,
+        txtBottom: 0,
+        value1: 0,
+        value2: 0,
+        value3: 0
+    }
+    const STORE_KEY = 'gradient_saved_data_01';
 
     // document ready
     document.addEventListener('DOMContentLoaded', function () {
@@ -209,6 +221,27 @@
         hideTag(tagResult1);
         hideTag(tagResult2);
         hideTag(tagResult3);
+    }
+
+    function save() {
+        savedData.txtEdge = getValueOfInput(tagTextEdge);
+        savedData.txtBottom = getValueOfInput(tagTextBottom);
+        savedData.value1 = getTextOfTag(tagValue1);
+        savedData.value2 = getTextOfTag(tagValue2);
+        savedData.value3 = getTextOfTag(tagValue3);
+        localStorage.setItem(STORE_KEY, JSON.stringify(savedData))
+    }
+
+    function recovery() {
+        let storeDate = localStorage.getItem(STORE_KEY);
+        if(storeDate != undefined && storeDate != null) {
+            savedData = JSON.parse(storeDate);
+            setValueOfInput(tagTextEdge, savedData.txtEdge);
+            setValueOfInput(tagTextBottom, savedData.txtBottom);
+            setTextOfTag(tagValue1, savedData.value1);
+            setTextOfTag(tagValue2, savedData.value2);
+            setTextOfTag(tagValue3, savedData.value3);
+        }
     }
 </script>
 </html>
