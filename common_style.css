@@ -35,3 +35,10 @@ form dl dd {
 .hide {
     display: none !important;
 }
+.bread-cum {
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+.bread-cum-split {
+    margin: 0px 5px;
+}
