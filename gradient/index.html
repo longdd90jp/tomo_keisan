@@ -175,9 +175,8 @@
 
     function processDisplayVal(mathObj) {
         let strVal = mathObj.toFixed(precision).toString();
-        // let preVal = mathObj.toFixed(precision - 1).toString();
-        // if(!strVal.endsWith(preVal)) strVal = preVal;
-        if(strVal.endsWith('000')) return parseFloat(strVal).toString();
+        if(isInt(parseFloat(strVal))) return numberWithCommas(parseInt(strVal));
+        if(strVal.endsWith('0')) return parseFloat(strVal).toString();
         return strVal;
 
     }

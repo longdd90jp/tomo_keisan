@@ -38,3 +38,11 @@ function trimByNumberDigit(number, digit) {
     let strNum = number.toString();
     let arrPart = strNum.split('.');
 }
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function isInt(value) {
+    return !isNaN(value) &&
+        parseInt(Number(value)) == value &&
+        !isNaN(parseInt(value, 10));
+}
