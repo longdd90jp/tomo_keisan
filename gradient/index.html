@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>勾配計算（登り坂の角度）</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../common_style.css">
+    <script src="../common_js.js"></script>
+    <script src="../lib/math.min.js"></script>
+    <style>
+        .wrapper {
+            min-height: 365px;
+        }
+        form dl dt {
+            width: 100px;
+        }
+
+        .box {
+            width: 180px;
+        }
+
+        .note {
+            margin-left: 90px;
+        }
+
+        .btn-block {
+            margin-top: 0px;
+            margin-left: 100px;
+        }
+
+        .precision {
+            height: 31px;
+            width: 55px;
+            padding-top: 1px;
+        }
+
+        .clear-btn {
+            padding-top: 4px;
+        }
+
+        table, th, td {
+            border: 1px solid #d8b3b3;
+            border-collapse: collapse;
+        }
+        .separate-line {
+            margin-left: 50px;
+            border: 1px solid #8f9fd8;
+            margin-bottom: 20px;
+            width: 350px;
+        }
+        .tbl-result {
+            margin-left: 100px;
+        }
+        .tbl-result thead td{
+            text-align: center;
+        }
+        .tbl-result tr {
+            height: 24px;
+        }
+        .td-title {
+            text-align: center;
+        }
+        .thead-title {
+            padding: 0px 10px;
+        }
+        .thead-value {
+            min-width: 100px;
+        }
+        .td-value {
+            padding-right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="bread-cum">
+    <a href="../index.html">ホーム</a><span class="bread-cum-split">/</span><span>勾配計算（登り坂の角度）</span>
+</div>
+<form class="wrapper">
+    <dl>
+        <dt>水平距離</dt>
+        <dd>
+            <input id="txt_edge" type="number" class="box" value="100">
+        </dd>
+        <dt>垂直距離</dt>
+        <dd>
+            <input id="txt_bottom" type="number" class="box" value="1">
+        </dd>
+        <p class="btn-block">
+            <input type="button" class="calc-btn font-bold" value="計算" onclick="calculate();">
+            <input type="button" class="calc-btn clear-btn" value="クリア" onclick="clearInput();">
+            <select id="sl_precision" class="precision hide">
+                <option value="6">6桁</option>
+                <option value="10">10桁</option>
+                <option value="14" selected="">14桁</option>
+                <option value="18">18桁</option>
+                <option value="22">22桁</option>
+                <option value="26">26桁</option>
+                <option value="30">30桁</option>
+                <option value="34">34桁</option>
+                <option value="38">38桁</option>
+                <option value="42">42桁</option>
+                <option value="46">46桁</option>
+                <option value="50">50桁</option>
+            </select>
+        </p>
+    </dl>
+    <div class="separate-line"></div>
+    <table class="tbl-result">
+        <tbody>
+        <tr id="tr_result_1">
+            <td id="td_title_result_1" class="td-title">パーセント(％)</td>
+            <td id="td_value_result_1" class="td-value"></td>
+        </tr>
+        <tr id="tr_result_2">
+            <td id="td_title_result_2" class="td-title">パーミル(‰)	</td>
+            <td id="td_value_result_2" class="td-value"></td>
+        </tr>
+        <tr id="tr_result_3">
+            <td id="td_title_result_3" class="td-title">角度</td>
+            <td id="td_value_result_3" class="td-value"></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+<script type="text/javascript">
+    let tagTextEdge;
+    let tagTextBottom;
+    let tagPrecision;
+    let tagValue1;
+    let tagValue2;
+    let tagValue3;
+
+    // input
+    let inputEdge;
+    let inputBottom;
+    let precision = 3;
+
+    // document ready
+    document.addEventListener('DOMContentLoaded', function () {
+        tagTextEdge = document.getElementById('txt_edge');
+        tagTextBottom = document.getElementById('txt_bottom');
+        tagPrecision = document.getElementById('sl_precision');
+        // td value
+        tagValue1 = document.getElementById('td_value_result_1');
+        tagValue2 = document.getElementById('td_value_result_2');
+        tagValue3 = document.getElementById('td_value_result_3');
+
+        // change the configuration
+        math.config({
+            number: 'BigNumber',
+            precision: 64,
+        })
+    });
+
+    function calculate() {
+        let isValid = checkInput();
+        if(!isValid) {
+            alert('水平距離と垂直距離が正しく入力してください。');
+            return;
+        }
+
+        // percent
+        let percentMath = math.bignumber(inputBottom / inputEdge * 100);
+        setTextOfTag(tagValue1, processDisplayVal(percentMath));
+
+        // milli-percent
+        let milliPercentMath = math.bignumber(inputBottom / inputEdge * 1000);
+        setTextOfTag(tagValue2, processDisplayVal(milliPercentMath));
+
+        // atan
+        let atanMath = math.atan(math.bignumber(inputBottom / inputEdge));
+        setTextOfTag(tagValue3, processDisplayVal(math.bignumber(atanMath * 180 / math.pi)));
+    }
+
+    function processDisplayVal(mathObj) {
+        let strVal = mathObj.toFixed(precision).toString();
+        // let preVal = mathObj.toFixed(precision - 1).toString();
+        // if(!strVal.endsWith(preVal)) strVal = preVal;
+        if(strVal.endsWith('000')) return parseFloat(strVal).toString();
+        return strVal;
+
+    }
+
+    function checkInput() {
+        // edge value
+        let edge = getValueOfInput(tagTextEdge);
+        if(isBlank(edge)) return false;
+        inputEdge = parseFloat(edge);
+        if(isNaN(inputEdge)) return false;
+
+        // bottom value
+        let bottom = getValueOfInput(tagTextBottom);
+        if(isBlank(bottom)) return false;
+        inputBottom = parseFloat(bottom);
+        if(isNaN(inputBottom)) return false;
+
+        // ok
+        inputEdge = math.bignumber(inputEdge);
+        inputBottom = math.bignumber(inputBottom);
+        return true;
+    }
+
+    function clearInput() {
+        setValueOfInput(tagTextEdge, BLANK);
+        setValueOfInput(tagTextBottom, BLANK);
+    }
+
+    function hideAllResult() {
+        hideTag(tagResult1);
+        hideTag(tagResult2);
+        hideTag(tagResult3);
+    }
+</script>
+</html>

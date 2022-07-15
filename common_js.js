@@ -1,3 +1,7 @@
+const MATH_DEG = 'deg';
+const MATH_RAD = 'rad';
+const BLANK = '';
+
 function isBlank(valStr) {
     if(valStr == undefined || valStr == null) return true;
     return valStr.trim() == '';

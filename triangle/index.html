@@ -73,7 +73,7 @@
 </head>
 <body>
 <div class="bread-cum">
-    <a href="/index.html">ホーム</a><span class="bread-cum-split">/</span><span>三角関数（度）</span>
+    <a href="../index.html">ホーム</a><span class="bread-cum-split">/</span><span>三角関数（度）</span>
 </div>
 <form class="wrapper">
     <dl>
@@ -125,15 +125,15 @@
         <tbody>
         <tr id="tr_result_1">
             <td id="td_title_result_1" class="td-title">cscθ</td>
-            <td id="td_value_result_1" class="td-value">11.03003432146</td>
+            <td id="td_value_result_1" class="td-value"></td>
         </tr>
         <tr id="tr_result_2">
             <td id="td_title_result_2" class="td-title">cscθ</td>
-            <td id="td_value_result_2" class="td-value">11.03003432146</td>
+            <td id="td_value_result_2" class="td-value"></td>
         </tr>
         <tr id="tr_result_3">
             <td id="td_title_result_3" class="td-title">cscθ</td>
-            <td id="td_value_result_3" class="td-value">11.03003432146</td>
+            <td id="td_value_result_3" class="td-value"></td>
         </tr>
         </tbody>
     </table>
@@ -157,9 +157,6 @@
     let inputAngle;
     let precision;
 
-    const MATH_DEG = 'deg';
-    const BLANK = '';
-
     // document ready
     document.addEventListener('DOMContentLoaded', function () {
         tagFunction = document.getElementById('sl_func');
@@ -180,8 +177,6 @@
         // default
         hideTag(tagResult2);
         hideTag(tagResult3);
-        setTextOfTag(tagTitle1, BLANK);
-        setTextOfTag(tagValue1, BLANK);
 
         // change the configuration
         math.config({
@@ -191,7 +186,7 @@
     });
 
     function calculate() {
-        let isValid = checkInputAngle(tagAngle);
+        let isValid = checkInputAngle();
         if(!isValid) {
             alert('角度θが正しく入力してください。');
             return;
