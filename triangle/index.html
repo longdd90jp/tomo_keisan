@@ -212,12 +212,28 @@
                 calCos();
                 calTan();
                 break;
+            case '5':
+                calCsc();
+                break;
+            case '6':
+                calSec();
+                break;
+            case '7':
+                calCot();
+                break;
+            case '8':
+                calCsc();
+                calSec();
+                calCot();
+                break;
         }
     }
 
     function processDisplayVal(mathObj) {
         let strVal = mathObj.toFixed(precision).toString();
-        if(strVal.endsWith('000')) return mathObj.toString();
+        // let preVal = mathObj.toFixed(precision - 1).toString();
+        // if(!strVal.endsWith(preVal)) strVal = preVal;
+        if(strVal.endsWith('000')) return parseFloat(strVal).toString();
         return strVal;
 
     }
@@ -236,6 +252,25 @@
     function calTan() {
         setTextOfTag(tagTitle3, 'tanθ');
         let calVal = processDisplayVal(math.tan(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue3, calVal);
+        showTag(tagResult3);
+    }
+
+    function calCsc() {
+        setTextOfTag(tagTitle1, 'cscθ');
+        let calVal = processDisplayVal(math.csc(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue1, calVal);
+        showTag(tagResult1);
+    }
+    function calSec() {
+        setTextOfTag(tagTitle2, 'secθ');
+        let calVal = processDisplayVal(math.sec(math.unit(inputAngle, MATH_DEG)));
+        setTextOfTag(tagValue2, calVal);
+        showTag(tagResult2);
+    }
+    function calCot() {
+        setTextOfTag(tagTitle3, 'cotθ');
+        let calVal = processDisplayVal(math.cot(math.unit(inputAngle, MATH_DEG)));
         setTextOfTag(tagValue3, calVal);
         showTag(tagResult3);
     }
