@@ -32,6 +32,7 @@
             height: 31px;
             width: 55px;
             padding-top: 1px;
+            margin-right: 5px;
         }
 
         .clear-btn {
@@ -46,7 +47,7 @@
             margin-left: 50px;
             border: 1px solid #8f9fd8;
             margin-bottom: 20px;
-            width: 350px;
+            width: 280px;
         }
         .tbl-result {
             margin-left: 100px;
@@ -113,6 +114,10 @@
                 <option value="50">50桁</option>
             </select>
         </p>
+        <p class="btn-block">
+            <input type="button" class="calc-btn" value="保存" onclick="save();">
+            <input type="button" class="calc-btn" value="復元" onclick="recovery();">
+        </p>
     </dl>
     <div class="separate-line"></div>
     <table class="tbl-result">
@@ -124,15 +129,15 @@
         </thead>
         <tbody>
         <tr id="tr_result_1">
-            <td id="td_title_result_1" class="td-title">cscθ</td>
+            <td id="td_title_result_1" class="td-title"></td>
             <td id="td_value_result_1" class="td-value"></td>
         </tr>
         <tr id="tr_result_2">
-            <td id="td_title_result_2" class="td-title">cscθ</td>
+            <td id="td_title_result_2" class="td-title"></td>
             <td id="td_value_result_2" class="td-value"></td>
         </tr>
         <tr id="tr_result_3">
-            <td id="td_title_result_3" class="td-title">cscθ</td>
+            <td id="td_title_result_3" class="td-title"></td>
             <td id="td_value_result_3" class="td-value"></td>
         </tr>
         </tbody>
@@ -152,6 +157,20 @@
     let tagValue1;
     let tagValue2;
     let tagValue3;
+
+    // local storage
+    let savedData = {
+        slFunction: 0,
+        txtAngle: '',
+        slPrecision: 0,
+        title1: '',
+        title2: '',
+        title3: '',
+        value1: 0,
+        value2: 0,
+        value3: 0
+    }
+    const STORE_KEY = 'triangle_saved_data_01';
 
     // input
     let inputAngle;
@@ -315,6 +334,49 @@
         hideTag(tagResult1);
         hideTag(tagResult2);
         hideTag(tagResult3);
+    }
+
+    function save() {
+        savedData.slFunction = getValueOfInput(tagFunction);
+        savedData.txtAngle = getValueOfInput(tagAngle);
+        savedData.slPrecision = getValueOfInput(tagPrecision);
+        // title
+        savedData.title1 = getTextOfTag(tagTitle1);
+        savedData.title2 = getTextOfTag(tagTitle2);
+        savedData.title3 = getTextOfTag(tagTitle3);
+        // value
+        savedData.value1 = getTextOfTag(tagValue1);
+        savedData.value2 = getTextOfTag(tagValue2);
+        savedData.value3 = getTextOfTag(tagValue3);
+        localStorage.setItem(STORE_KEY, JSON.stringify(savedData))
+    }
+
+    function recovery() {
+        let storeDate = localStorage.getItem(STORE_KEY);
+        if(storeDate != undefined && storeDate != null) {
+            savedData = JSON.parse(storeDate);
+            setValueOfInput(tagAngle, savedData.txtAngle);
+            setValueOfInput(tagFunction, savedData.slFunction);
+            setValueOfInput(tagPrecision, savedData.slPrecision);
+
+            if(savedData.slFunction != '4' && savedData.slFunction != '8') {
+                hideTag(tagResult2);
+                hideTag(tagResult3);
+            } else {
+                showTag(tagResult1);
+                showTag(tagResult2);
+                showTag(tagResult3);
+            }
+
+            // title
+            setTextOfTag(tagTitle1, savedData.title1);
+            setTextOfTag(tagTitle2, savedData.title2);
+            setTextOfTag(tagTitle3, savedData.title3);
+            // value
+            setTextOfTag(tagValue1, savedData.value1);
+            setTextOfTag(tagValue2, savedData.value2);
+            setTextOfTag(tagValue3, savedData.value3);
+        }
     }
 </script>
 </html>
